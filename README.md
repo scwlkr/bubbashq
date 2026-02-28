@@ -18,7 +18,7 @@ BubbaHQ is a serverless, decoupled single-page application (SPA) built to manage
 - **API Middleware:** Google Apps Script (Serverless Web App handling `GET` and `POST` requests directly via `text/plain` payloads to bypass preflight CORS).
 
 ### Hosting & Infrastructure
-- **Hosting & CI/CD:** [Vercel](https://vercel.com/) (Auto-deploys from the `master` branch on GitHub).
+- **Hosting & CI/CD:** [Vercel](https://vercel.com/) (Auto-deploys from the `main` branch on GitHub).
 - **Domain & DNS:** Hostinger (`bubbashq.xyz`). DNS uses an `A` record pointing to Vercel's Anycast IP (`76.76.21.21`) and a `CNAME` for the `www` subdomain.
 
 ---
