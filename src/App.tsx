@@ -6,7 +6,7 @@ import AuthWrapper from './components/AuthWrapper';
 
 function App() {
   return (
-    <Router basename="/bubba-dashboard">
+    <Router>
       <div className="min-h-screen bg-black text-white selection:bg-brand-green selection:text-black font-sans">
         <Toaster theme="dark" position="top-center" />
         <AuthWrapper>
