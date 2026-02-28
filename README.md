@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# BubbaHQ
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+BubbaHQ is a serverless, decoupled single-page application (SPA) built to manage and monitor operational status across multiple locations. It uses a modern React frontend deployed on Vercel, with a live Google Sheets instance functioning as the NoSQL database.
 
-Currently, two official plugins are available:
+## 🚀 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Frontend
+- **Framework:** [React 19](https://react.dev/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Routing:** [React Router v7](https://reactrouter.com/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **UI Notifications:** [Sonner](https://sonner.emilkowal.ski/)
 
-## React Compiler
+### Backend & Database
+- **Database Layer:** Google Sheets (`Bubba_DB`)
+- **API Middleware:** Google Apps Script (Serverless Web App handling `GET` and `POST` requests directly via `text/plain` payloads to bypass preflight CORS).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Hosting & Infrastructure
+- **Hosting & CI/CD:** [Vercel](https://vercel.com/) (Auto-deploys from the `master` branch on GitHub).
+- **Domain & DNS:** Hostinger (`bubbashq.xyz`). DNS uses an `A` record pointing to Vercel's Anycast IP (`76.76.21.21`) and a `CNAME` for the `www` subdomain.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 Setup & Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Follow these steps to set up the development environment on your local machine.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone & Install
+```bash
+git clone https://github.com/scwlkr/scwlkr.git
+cd bubbashq
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Configure Environment Variables
+Create a scoped `.env.local` file at the root of the project:
+```env
+# The ID of the Google Sheet (found in the URL: docs.google.com/spreadsheets/d/<THIS_ID>/edit)
+VITE_GOOGLE_SHEET_ID="<YOUR_SPREADSHEET_ID>"
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# The deployed Web App URL from Google Apps Script
+VITE_APPS_SCRIPT_URL="<YOUR_DEPLOYED_MACRO_URL>"
 ```
+
+### 3. Run the Development Server
+```bash
+npm run dev
+```
+Navigate to `http://localhost:5173` to view the application in your browser.
+
+---
+
+## 🌍 Production Deployment Guide
+
+The application is deployed directly via **Vercel** with a custom domain managed by **Hostinger**.
+
+### Vercel Integration
+1. Import the GitHub repository into a new Vercel project.
+2. Vercel automatically detects the Vite framework and configures the build settings (`npm run build`, output directory: `dist`).
+3. Add the production environment variables (`VITE_GOOGLE_SHEET_ID` and `VITE_APPS_SCRIPT_URL`) in the **Vercel Project Settings > Environment Variables**.
+4. Pushing code updates to the `master` branch will trigger an automatic production build and deployment pipeline in Vercel.
+
+### DNS Configuration (Hostinger)
+The custom domain `bubbashq.xyz` is connected to Vercel using the following DNS records in Hostinger:
+- **A Record:** Defines the apex domain (`@`) pointing to Vercel's IP address: `76.76.21.21`.
+- **CNAME Record:** Resolves the `www` subdomain to Vercel via: `cname.vercel-dns.com`.
+
+*(Make sure to remove any legacy `A` and `CNAME` records left behind from Hostinger's default web hosting configurations).*
+
+---
+
+For detailed information about the system architecture, "Handshake" logic, and disaster recovery procedures, please refer to the [`docs/SYSTEM_MANUAL.md`](./docs/SYSTEM_MANUAL.md).
